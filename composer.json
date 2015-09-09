@@ -1,0 +1,32 @@
+{
+    "name": "novuso/common-bundle",
+    "description": "Novuso Common Symfony Bundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6",
+        "novuso/common": "~0.1",
+        "novuso/system": "~0.1",
+        "symfony/console": "~2.7",
+        "symfony/framework-bundle": "~2.7",
+        "symfony/monolog-bundle": "~2.7",
+        "symfony/serializer": "~2.7",
+        "willdurand/negotiation": "~1.4"
+    },
+    "require-dev": {
+        "codegyre/robo": "~0.5",
+        "mikey179/vfsStream": "~1.5",
+        "mockery/mockery": "~0.9",
+        "phpmd/phpmd": "~2.2",
+        "phpunit/phpunit": "~4.8",
+        "sami/sami": "~3.0",
+        "squizlabs/php_codesniffer": "~2.3",
+        "symfony/filesystem": "~2.7",
+        "symfony/finder": "~2.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Novuso\\Common\\Bundle\\": "src",
+            "Novuso\\Test\\Common\\Bundle\\": "test"
+        }
+    }
+}

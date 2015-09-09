@@ -1,0 +1,85 @@
+#==============================================================================
+# Use the following to tag command filter services:
+# tags:
+#     - { name: novuso_common.command_filter }
+#==============================================================================
+# Use the following to tag query filter services:
+# tags:
+#     - { name: novuso_common.query_filter }
+#==============================================================================
+# Use the following to tag domain event subscriber services:
+# tags:
+#     - { name: novuso_common.event_subscriber }
+#==============================================================================
+# Use the following to tag command handler services:
+# tags:
+#     -
+#         name: novuso_common.command_handler
+#         command: Namespace\CommandClassName
+#==============================================================================
+# Use the following to tag query handler services:
+# tags:
+#     -
+#         name: novuso_common.query_handler
+#         query: Namespace\QueryClassName
+#==============================================================================
+# Use the following to tag HTTP responder services:
+# tags:
+#     -
+#         name: novuso_common.http_responder
+#         action: Namespace\ActionClassName
+#==============================================================================
+services:
+    novuso_common.service_container:
+        class: Novuso\Common\Bundle\DependencyInjection\ContainerAdapter
+        arguments:
+            - @service_container
+    novuso_common.logger:
+        class: Novuso\Common\Bundle\Logging\LoggerAdapter
+        arguments:
+            - @logger
+    novuso_common.event_dispatcher:
+        class: Novuso\Common\Application\Messaging\Event\EventServiceDispatcher
+        arguments:
+            - @novuso_common.service_container
+    novuso_common.command_pipeline:
+        class: Novuso\Common\Application\Messaging\Command\CommandPipeline
+        arguments:
+            - @novuso_common.command_service_resolver
+    novuso_common.query_pipeline:
+        class: Novuso\Common\Application\Messaging\Query\QueryPipeline
+        arguments:
+            - @novuso_common.query_service_resolver
+    novuso_common.command_service_resolver:
+        class: Novuso\Common\Application\Messaging\Command\Resolver\CommandServiceResolver
+        arguments:
+            - @novuso_common.command_service_map
+        public: false
+    novuso_common.command_service_map:
+        class: Novuso\Common\Application\Messaging\Command\Resolver\CommandServiceMap
+        arguments:
+            - @novuso_common.service_container
+    novuso_common.query_service_resolver:
+        class: Novuso\Common\Application\Messaging\Query\Resolver\QueryServiceResolver
+        arguments:
+            - @novuso_common.query_service_map
+        public: false
+    novuso_common.query_service_map:
+        class: Novuso\Common\Application\Messaging\Query\Resolver\QueryServiceMap
+        arguments:
+            - @novuso_common.service_container
+    novuso_common.responder_subscriber:
+        class: Novuso\Common\Bundle\Subscriber\ResponderSubscriber
+        arguments:
+            - @novuso_common.responder_service_resolver
+        tags:
+            - { name: kernel.event_subscriber }
+    novuso_common.responder_service_resolver:
+        class: Novuso\Common\Bundle\Http\Resolver\ResponderServiceResolver
+        arguments:
+            - @novuso_common.responder_service_map
+        public: false
+    novuso_common.responder_service_map:
+        class: Novuso\Common\Bundle\Http\Resolver\ResponderServiceMap
+        arguments:
+            - @novuso_common.service_container
