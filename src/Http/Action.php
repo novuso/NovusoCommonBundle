@@ -4,7 +4,6 @@ namespace Novuso\Common\Bundle\Http;
 
 use Exception;
 use Novuso\System\Type\Type;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
