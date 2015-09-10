@@ -3,7 +3,6 @@
 namespace Novuso\Test\Common\Bundle\Doubles\Http;
 
 use Novuso\Common\Bundle\Http\Responder;
-use Symfony\Component\HttpFoundation\Response;
 
 class IndexResponder extends Responder
 {
