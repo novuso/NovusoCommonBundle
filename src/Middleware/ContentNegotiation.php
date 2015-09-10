@@ -66,10 +66,10 @@ class ContentNegotiation implements HttpKernelInterface, TerminableInterface
      *
      * @var DecoderInterface
      */
-    protected $decoder;
+    protected $contentDecoder;
 
     /*
-     * The following methods are derived from code of the Stack Negotiation
+     * The following methods are derived from code of Stack Negotiation
      * (1.0.0 - 2014-10-28)
      *
      * Copyright (c) William Durand <william.durand1@gmail.com>
@@ -102,7 +102,7 @@ class ContentNegotiation implements HttpKernelInterface, TerminableInterface
      * @param string[]                       $languagePriorities The language priorities
      * @param FormatNegotiatorInterface|null $formatNegotiator   The format negotiator
      * @param NegotiatorInterface|null       $languageNegotiator The language negotiator
-     * @param DecoderInterface|null          $decoder            The decoder
+     * @param DecoderInterface|null          $contentDecoder     The content decoder
      */
     public function __construct(
         HttpKernelInterface $kernel,
@@ -110,14 +110,14 @@ class ContentNegotiation implements HttpKernelInterface, TerminableInterface
         array $languagePriorities = [],
         FormatNegotiatorInterface $formatNegotiator = null,
         NegotiatorInterface $languageNegotiator = null,
-        DecoderInterface $decoder = null
+        DecoderInterface $contentDecoder = null
     ) {
         $this->kernel = $kernel;
         $this->formatPriorities = $formatPriorities;
         $this->languagePriorities = $languagePriorities;
         $this->formatNegotiator = $formatNegotiator ?: new FormatNegotiator();
         $this->languageNegotiator = $languageNegotiator ?: new LanguageNegotiator();
-        $this->decoder = $decoder ?: new ChainDecoder([new JsonEncoder(), new XmlEncoder()]);
+        $this->contentDecoder = $contentDecoder ?: new ChainDecoder([new JsonEncoder(), new XmlEncoder()]);
     }
 
     /**
@@ -200,7 +200,7 @@ class ContentNegotiation implements HttpKernelInterface, TerminableInterface
             $contentType = $request->headers->get('Content-Type', '');
             $format = $this->formatNegotiator->getFormat($contentType);
 
-            if (!$this->decoder->supportsDecoding($format)) {
+            if (!$this->contentDecoder->supportsDecoding($format)) {
                 return;
             }
 
@@ -208,7 +208,7 @@ class ContentNegotiation implements HttpKernelInterface, TerminableInterface
 
             if (!empty($content)) {
                 try {
-                    $data = $this->decoder->decode($content, $format);
+                    $data = $this->contentDecoder->decode($content, $format);
                 } catch (Exception $exception) {
                     $data = null;
                 }
